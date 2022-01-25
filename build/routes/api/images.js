@@ -54,8 +54,12 @@ images.get('/images', function (req, res) { return __awaiter(void 0, void 0, voi
                 return [4 /*yield*/, images_1.default.imageParams(imageName)];
             case 1:
                 originalImageInfo = _a.sent();
-                width = isNaN(Number(req.query.width)) ? originalImageInfo.width : Number(req.query.width);
-                height = isNaN(Number(req.query.height)) ? originalImageInfo.height : Number(req.query.height);
+                width = isNaN(Number(req.query.width))
+                    ? originalImageInfo.width
+                    : Number(req.query.width);
+                height = isNaN(Number(req.query.height))
+                    ? originalImageInfo.height
+                    : Number(req.query.height);
                 imagePath = "images/resized/".concat(imageName, "(").concat(width, "x").concat(height, ").").concat(imageExtension);
                 if (fs_1.default.existsSync(imagePath)) {
                     res.status(200);
@@ -63,7 +67,7 @@ images.get('/images', function (req, res) { return __awaiter(void 0, void 0, voi
                 }
                 else {
                     res.status(404);
-                    res.send("This image doesn't exist, please provide an image in the folder images->source");
+                    res.send("This image doesn't exist, please provide an image in the folder images->source and try resizing it.");
                 }
                 return [2 /*return*/];
         }
@@ -80,8 +84,12 @@ images.get('/images/imageProcessing', function (req, res) { return __awaiter(voi
                 return [4 /*yield*/, images_1.default.imageParams(imageName)];
             case 1:
                 originalImageInfo = _a.sent();
-                width = isNaN(Number(req.query.width)) ? originalImageInfo.width : Number(req.query.width);
-                height = isNaN(Number(req.query.height)) ? originalImageInfo.height : Number(req.query.height);
+                width = isNaN(Number(req.query.width))
+                    ? originalImageInfo.width
+                    : Number(req.query.width);
+                height = isNaN(Number(req.query.height))
+                    ? originalImageInfo.height
+                    : Number(req.query.height);
                 invalidDimensions = isNaN(Number(req.query.width)) && isNaN(Number(req.query.height));
                 redirectPath = "/images?imageName=".concat(imageName, "&imageExtension=").concat(imageExtension, "&width=").concat(width, "&height=").concat(height);
                 if (!originalImageInfo.imageExists) {
@@ -97,7 +105,8 @@ images.get('/images/imageProcessing', function (req, res) { return __awaiter(voi
                                 .then(function () {
                                 res.status(302);
                                 res.redirect(redirectPath);
-                            }).catch(function (e) {
+                            })
+                                .catch(function (e) {
                                 res.status(400);
                                 res.send("The following error occured when trying to resize the image: ".concat(e));
                             });

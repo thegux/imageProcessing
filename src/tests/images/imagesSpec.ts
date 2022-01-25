@@ -15,7 +15,7 @@ describe('Testing Image endpoint responses', () => {
 	it('throws error in case of missing image', async () => {
 		const response = await request.get('/images?imageName=testNoImage');
 		expect(response.text).toBe(
-			"This image doesn't exist, please provide an image in the folder images->source"
+			"This image doesn't exist, please provide an image in the folder images->source and try resizing it."
 		);
 		expect(response.status).toBe(404);
 	});

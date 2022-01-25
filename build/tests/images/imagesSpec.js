@@ -63,7 +63,7 @@ describe('Testing Image endpoint responses', function () {
                 case 0: return [4 /*yield*/, request.get('/images?imageName=testNoImage')];
                 case 1:
                     response = _a.sent();
-                    expect(response.text).toBe("This image doesn't exist, please provide an image in the folder images->source");
+                    expect(response.text).toBe("This image doesn't exist, please provide an image in the folder images->source and try resizing it.");
                     expect(response.status).toBe(404);
                     return [2 /*return*/];
             }

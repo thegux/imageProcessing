@@ -29,7 +29,7 @@ images.get('/images', async (req: express.Request, res: express.Response) => {
 	} else {
 		res.status(404);
 		res.send(
-			"This image doesn't exist, please provide an image in the folder images->source"
+			"This image doesn't exist, please provide an image in the folder images->source and try resizing it."
 		);
 	}
 });
