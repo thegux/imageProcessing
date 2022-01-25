@@ -1,23 +1,19 @@
 import sharp from 'sharp';
 import fs from 'fs';
 
-async function imageParams(
-	fileName: string,
-) {
+async function imageParams(fileName: string) {
 	const imagePath = `images/source/${fileName}.jpg`;
 	if (fs.existsSync(imagePath)) {
 		const sharpImage = sharp(imagePath);
 		const data = await sharpImage.metadata();
 
-		return {...data, imageExists: true};
+		return { ...data, imageExists: true };
 	}
 	return {
 		width: null,
 		height: null,
 		imageExists: false,
-	}
-
-
+	};
 }
 
 function resizeImage(

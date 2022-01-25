@@ -14,8 +14,12 @@ images.get('/images', async (req: express.Request, res: express.Response) => {
 	const originalImageInfo = await imagesHelper.imageParams(imageName);
 
 	// GETTING AND VALIDATING width and height
-	let width = isNaN(Number(req.query.width)) ? originalImageInfo.width : Number(req.query.width);
-	let height = isNaN(Number(req.query.height)) ? originalImageInfo.height : Number(req.query.height);
+	const width = isNaN(Number(req.query.width))
+		? originalImageInfo.width
+		: Number(req.query.width);
+	const height = isNaN(Number(req.query.height))
+		? originalImageInfo.height
+		: Number(req.query.height);
 
 	const imagePath = `images/resized/${imageName}(${width}x${height}).${imageExtension}`;
 
@@ -44,30 +48,42 @@ images.get(
 		const originalImageInfo = await imagesHelper.imageParams(imageName);
 
 		// GETTING AND VALIDATING width and height
-		let width = isNaN(Number(req.query.width)) ? originalImageInfo.width : Number(req.query.width);
-		let height = isNaN(Number(req.query.height)) ? originalImageInfo.height : Number(req.query.height);
+		const width = isNaN(Number(req.query.width))
+			? originalImageInfo.width
+			: Number(req.query.width);
+		const height = isNaN(Number(req.query.height))
+			? originalImageInfo.height
+			: Number(req.query.height);
 
-		//BOTH DIMENSIONS NAN 
-		const invalidDimensions = isNaN(Number(req.query.width)) && isNaN(Number(req.query.height));
+		//BOTH DIMENSIONS NAN
+		const invalidDimensions =
+			isNaN(Number(req.query.width)) && isNaN(Number(req.query.height));
 
 		const redirectPath = `/images?imageName=${imageName}&imageExtension=${imageExtension}&width=${width}&height=${height}`;
 
-		if(!originalImageInfo.imageExists) {
+		if (!originalImageInfo.imageExists) {
 			res.status(404);
-			res.send("Source image doesn't exist, please provide an image in the folder images->source")
+			res.send(
+				"Source image doesn't exist, please provide an image in the folder images->source"
+			);
 		} else {
 			if (imageName && width && height && !invalidDimensions) {
-				const resizedImageExists = fs.existsSync(`images/resized/${imageName}(${width}x${height}).${imageExtension}`)
-	
+				const resizedImageExists = fs.existsSync(
+					`images/resized/${imageName}(${width}x${height}).${imageExtension}`
+				);
+
 				if (!resizedImageExists) {
 					imagesHelper
 						.resizeImage(imageName, width, height, imageExtension)
 						.then(() => {
 							res.status(302);
 							res.redirect(redirectPath);
-						}).catch((e) => {
+						})
+						.catch((e) => {
 							res.status(400);
-							res.send(`The following error occured when trying to resize the image: ${e}`);
+							res.send(
+								`The following error occured when trying to resize the image: ${e}`
+							);
 						});
 				} else {
 					res.status(302);
@@ -75,11 +91,11 @@ images.get(
 				}
 			} else {
 				res.status(400);
-				res.send(`This api requires an imageName (type = string), width (type = number) or height (type = number) parameter to properly resize it`);
+				res.send(
+					`This api requires an imageName (type = string), width (type = number) or height (type = number) parameter to properly resize it`
+				);
 			}
 		}
-
-		
 	}
 );
 

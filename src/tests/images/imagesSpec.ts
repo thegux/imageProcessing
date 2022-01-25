@@ -5,7 +5,9 @@ const request = supertest(app);
 
 describe('Testing Image endpoint responses', () => {
 	it('gets an image', async () => {
-		const response = await request.get('/images?imageName=fjord&width=700&height=1280');
+		const response = await request.get(
+			'/images?imageName=fjord&width=700&height=1280'
+		);
 		expect(response.type).toBe('image/jpeg');
 		expect(response.status).toBe(200);
 	});
