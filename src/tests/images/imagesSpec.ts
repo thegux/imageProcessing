@@ -5,7 +5,7 @@ const request = supertest(app);
 
 describe('Testing Image endpoint responses', () => {
 	it('gets an image', async () => {
-		const response = await request.get('/images?imageName=santamonica');
+		const response = await request.get('/images?imageName=fjord&width=700&height=1280');
 		expect(response.type).toBe('image/jpeg');
 		expect(response.status).toBe(200);
 	});
@@ -30,7 +30,7 @@ describe('Testing Image endpoint responses', () => {
 			'/images/imageProcessing?imageName=santamonica'
 		);
 		expect(response.text).toBe(
-			'This api requires an imageName, width, and height parameter to properly resize it'
+			'This api requires an imageName (type = string), width (type = number) or height (type = number) parameter to properly resize it'
 		);
 		expect(response.status).toBe(400);
 	});

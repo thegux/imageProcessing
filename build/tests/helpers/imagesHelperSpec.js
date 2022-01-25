@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -50,36 +39,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var sharp_1 = __importDefault(require("sharp"));
-var fs_1 = __importDefault(require("fs"));
-function imageParams(fileName) {
-    return __awaiter(this, void 0, void 0, function () {
-        var imagePath, sharpImage, data;
+var images_1 = __importDefault(require("../../helpers/images"));
+describe('Image Resizing', function () {
+    it('resizes an image', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    imagePath = "images/source/".concat(fileName, ".jpg");
-                    if (!fs_1.default.existsSync(imagePath)) return [3 /*break*/, 2];
-                    sharpImage = (0, sharp_1.default)(imagePath);
-                    return [4 /*yield*/, sharpImage.metadata()];
+                case 0: return [4 /*yield*/, images_1.default.resizeImage('santamonica', 500, 600, 'jpg')];
                 case 1:
-                    data = _a.sent();
-                    return [2 /*return*/, __assign(__assign({}, data), { imageExists: true })];
-                case 2: return [2 /*return*/, {
-                        width: null,
-                        height: null,
-                        imageExists: false,
-                    }];
+                    response = _a.sent();
+                    expect(response.format).toBe('jpeg');
+                    expect(response.width).toBe(500);
+                    expect(response.height).toBe(600);
+                    return [2 /*return*/];
             }
         });
-    });
-}
-function resizeImage(fileName, width, height, extension) {
-    return (0, sharp_1.default)("images/source/".concat(fileName, ".jpg"))
-        .resize(width, height)
-        .toFile("images/resized/".concat(fileName, "(").concat(width, "x").concat(height, ").").concat(extension));
-}
-exports.default = {
-    resizeImage: resizeImage,
-    imageParams: imageParams,
-};
+    }); });
+});

@@ -43,52 +43,76 @@ var express_1 = __importDefault(require("express"));
 var images_1 = __importDefault(require("../../helpers/images"));
 var fs_1 = __importDefault(require("fs"));
 var images = express_1.default.Router();
-images.get('/images', function (req, res) {
-    var imageName = String(req.query.imageName);
-    var imageExtension = String(req.query.imageExtension);
-    imageExtension = imageExtension !== 'undefined' ? imageExtension : 'jpg';
-    var imagePath = "images/resized/".concat(imageName, ".").concat(imageExtension);
-    if (fs_1.default.existsSync(imagePath)) {
-        res.status(200);
-        res.sendFile(imagePath, { root: '.' });
-    }
-    else {
-        res.status(404);
-        res.send("This image doesn't exist, please provide an image in the folder images->source");
-    }
-});
-images.get('/images/imageProcessing', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var imageName, imageExtension, width, height, imageExists;
+images.get('/images', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var imageName, imageExtension, originalImageInfo, width, height, imagePath;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 imageName = String(req.query.imageName);
                 imageExtension = String(req.query.imageExtension);
-                width = Number(req.query.width);
-                height = Number(req.query.height);
                 imageExtension = imageExtension !== 'undefined' ? imageExtension : 'jpg';
-                if (!(imageName && (width || height))) return [3 /*break*/, 2];
-                return [4 /*yield*/, images_1.default.imageExists(imageName, width, height, imageExtension)];
+                return [4 /*yield*/, images_1.default.imageParams(imageName)];
             case 1:
-                imageExists = _a.sent();
-                if (!imageExists) {
-                    images_1.default
-                        .resizeImage(imageName, width, height, imageExtension)
-                        .then(function () {
-                        res.status(302);
-                        res.redirect("/images?imageName=".concat(imageName, "&imageExtension=").concat(imageExtension));
-                    });
+                originalImageInfo = _a.sent();
+                width = isNaN(Number(req.query.width)) ? originalImageInfo.width : Number(req.query.width);
+                height = isNaN(Number(req.query.height)) ? originalImageInfo.height : Number(req.query.height);
+                imagePath = "images/resized/".concat(imageName, "(").concat(width, "x").concat(height, ").").concat(imageExtension);
+                if (fs_1.default.existsSync(imagePath)) {
+                    res.status(200);
+                    res.sendFile(imagePath, { root: '.' });
                 }
                 else {
-                    res.status(302);
-                    res.redirect("/images?imageName=".concat(imageName, "&imageExtension=").concat(imageExtension));
+                    res.status(404);
+                    res.send("This image doesn't exist, please provide an image in the folder images->source");
                 }
-                return [3 /*break*/, 3];
-            case 2:
-                res.status(400);
-                res.send("This api requires an imageName, width, and height parameter to properly resize it");
-                _a.label = 3;
-            case 3: return [2 /*return*/];
+                return [2 /*return*/];
+        }
+    });
+}); });
+images.get('/images/imageProcessing', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var imageName, imageExtension, originalImageInfo, width, height, invalidDimensions, redirectPath, resizedImageExists;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                imageName = String(req.query.imageName);
+                imageExtension = String(req.query.imageExtension);
+                imageExtension = imageExtension !== 'undefined' ? imageExtension : 'jpg';
+                return [4 /*yield*/, images_1.default.imageParams(imageName)];
+            case 1:
+                originalImageInfo = _a.sent();
+                width = isNaN(Number(req.query.width)) ? originalImageInfo.width : Number(req.query.width);
+                height = isNaN(Number(req.query.height)) ? originalImageInfo.height : Number(req.query.height);
+                invalidDimensions = isNaN(Number(req.query.width)) && isNaN(Number(req.query.height));
+                redirectPath = "/images?imageName=".concat(imageName, "&imageExtension=").concat(imageExtension, "&width=").concat(width, "&height=").concat(height);
+                if (!originalImageInfo.imageExists) {
+                    res.status(404);
+                    res.send("Source image doesn't exist, please provide an image in the folder images->source");
+                }
+                else {
+                    if (imageName && width && height && !invalidDimensions) {
+                        resizedImageExists = fs_1.default.existsSync("images/resized/".concat(imageName, "(").concat(width, "x").concat(height, ").").concat(imageExtension));
+                        if (!resizedImageExists) {
+                            images_1.default
+                                .resizeImage(imageName, width, height, imageExtension)
+                                .then(function () {
+                                res.status(302);
+                                res.redirect(redirectPath);
+                            }).catch(function (e) {
+                                res.status(400);
+                                res.send("The following error occured when trying to resize the image: ".concat(e));
+                            });
+                        }
+                        else {
+                            res.status(302);
+                            res.redirect(redirectPath);
+                        }
+                    }
+                    else {
+                        res.status(400);
+                        res.send("This api requires an imageName (type = string), width (type = number) or height (type = number) parameter to properly resize it");
+                    }
+                }
+                return [2 /*return*/];
         }
     });
 }); });

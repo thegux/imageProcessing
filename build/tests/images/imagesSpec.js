@@ -47,7 +47,7 @@ describe('Testing Image endpoint responses', function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/images?imageName=santamonica')];
+                case 0: return [4 /*yield*/, request.get('/images?imageName=fjord&width=700&height=1280')];
                 case 1:
                     response = _a.sent();
                     expect(response.type).toBe('image/jpeg');
@@ -88,7 +88,7 @@ describe('Testing Image endpoint responses', function () {
                 case 0: return [4 /*yield*/, request.get('/images/imageProcessing?imageName=santamonica')];
                 case 1:
                     response = _a.sent();
-                    expect(response.text).toBe('This api requires an imageName, width, and height parameter to properly resize it');
+                    expect(response.text).toBe('This api requires an imageName (type = string), width (type = number) or height (type = number) parameter to properly resize it');
                     expect(response.status).toBe(400);
                     return [2 /*return*/];
             }

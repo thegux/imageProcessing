@@ -1,23 +1,23 @@
 import sharp from 'sharp';
 import fs from 'fs';
 
-async function imageExists(
+async function imageParams(
 	fileName: string,
-	width: number,
-	height: number,
-	extension: string
 ) {
-	const imagePath = `images/resized/${fileName}.${extension}`;
+	const imagePath = `images/source/${fileName}.jpg`;
 	if (fs.existsSync(imagePath)) {
 		const sharpImage = sharp(imagePath);
 		const data = await sharpImage.metadata();
 
-		if (data.width === width && data.height === height) {
-			return true;
-		}
+		return {...data, imageExists: true};
+	}
+	return {
+		width: null,
+		height: null,
+		imageExists: false,
 	}
 
-	return false;
+
 }
 
 function resizeImage(
@@ -26,12 +26,12 @@ function resizeImage(
 	height: number,
 	extension: string
 ) {
-	return sharp(`images/source/${fileName}.${extension}`)
+	return sharp(`images/source/${fileName}.jpg`)
 		.resize(width, height)
-		.toFile(`images/resized/${fileName}.${extension}`);
+		.toFile(`images/resized/${fileName}(${width}x${height}).${extension}`);
 }
 
 export default {
 	resizeImage,
-	imageExists,
+	imageParams,
 };
