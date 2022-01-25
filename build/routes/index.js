@@ -4,11 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var routes_1 = __importDefault(require("./routes"));
-var app = (0, express_1.default)();
-var port = 3000;
-app.use('/', routes_1.default);
-app.listen(port, function () {
-    console.log("Listening to port http://localhost:".concat(port));
+var images_1 = __importDefault(require("./api/images"));
+var routes = express_1.default.Router();
+routes.get('/', function (req, res) {
+    res.send('Welcome to the Image Processing API');
 });
-exports.default = app;
+routes.use('/', images_1.default);
+exports.default = routes;
