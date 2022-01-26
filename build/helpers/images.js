@@ -52,6 +52,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var sharp_1 = __importDefault(require("sharp"));
 var fs_1 = __importDefault(require("fs"));
+/**IMAGE PARAMS FUNCTION */
 function imageParams(fileName) {
     return __awaiter(this, void 0, void 0, function () {
         var imagePath, sharpImage, data;
@@ -66,14 +67,14 @@ function imageParams(fileName) {
                     data = _a.sent();
                     return [2 /*return*/, __assign(__assign({}, data), { imageExists: true })];
                 case 2: return [2 /*return*/, {
-                        width: null,
-                        height: null,
+                        chromaSubsampling: '',
                         imageExists: false,
                     }];
             }
         });
     });
 }
+/**RESIZE IMAGE FUNCTION */
 function resizeImage(fileName, width, height, extension) {
     return (0, sharp_1.default)("images/source/".concat(fileName, ".jpg"))
         .resize(width, height)

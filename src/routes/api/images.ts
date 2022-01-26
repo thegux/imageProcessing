@@ -4,7 +4,7 @@ import fs from 'fs';
 
 const images = express.Router();
 
-images.get('/images', async (req: express.Request, res: express.Response) => {
+images.get('/images', async (req: express.Request, res: express.Response):Promise<void> => {
 	const imageName = String(req.query.imageName);
 	// GETTING AND VALIDATING imageExtension
 	let imageExtension = String(req.query.imageExtension);
@@ -36,7 +36,7 @@ images.get('/images', async (req: express.Request, res: express.Response) => {
 
 images.get(
 	'/images/imageProcessing',
-	async (req: express.Request, res: express.Response) => {
+	async (req: express.Request, res: express.Response):Promise<void> => {
 		// GETTING PARAM imageName
 		const imageName = String(req.query.imageName);
 
